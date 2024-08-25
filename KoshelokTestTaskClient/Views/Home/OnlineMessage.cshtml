@@ -1,0 +1,41 @@
+﻿
+
+@{
+    ViewData["Title"] = "WebSocket Example";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div id="messageContainer"></div>
+
+<script>
+    // Create a new WebSocket connection
+    var socket = new WebSocket('wss://localhost:7075/ws');
+
+    // Handle incoming messages from the WebSocket
+    socket.onmessage = function (event) {
+        // Get the message container element
+        var messageContainer = document.getElementById('messageContainer');
+
+        // Create a new div element for the received message
+        var messageDiv = document.createElement('div');
+        messageDiv.textContent = event.data; // Set the text content of the div to the received message
+
+        // Append the new message div to the message container
+        messageContainer.appendChild(messageDiv);
+    };
+
+    // Log when the WebSocket connection opens
+    socket.onopen = function (event) {
+        console.log('WebSocket connection opened');
+    };
+
+    // Log when the WebSocket connection closes
+    socket.onclose = function (event) {
+        console.log('WebSocket connection closed');
+    };
+
+    // Handle WebSocket errors
+    socket.onerror = function (error) {
+        console.error('WebSocket error:', error);
+    };
+</script>
