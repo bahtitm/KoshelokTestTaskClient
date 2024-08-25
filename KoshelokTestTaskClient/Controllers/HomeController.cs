@@ -30,7 +30,7 @@ namespace KoshelokTestTaskClient.Controllers
             return NoContent();
         }
 
-        public async Task<IActionResult> Privacy()
+        public async Task<IActionResult> AllMessage()
         {
             try
             {
@@ -47,10 +47,9 @@ namespace KoshelokTestTaskClient.Controllers
            
           
         }
-        public IActionResult OnlineMessage(string st)
-        {
-            var people = new List<string> { { st }, "Sam", "Bob" };
-            return View(people);
+        public IActionResult OnlineMessage()
+        {           
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

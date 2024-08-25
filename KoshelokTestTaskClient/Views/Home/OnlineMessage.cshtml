@@ -13,12 +13,24 @@
 
     // Handle incoming messages from the WebSocket
     socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
         // Get the message container element
         var messageContainer = document.getElementById('messageContainer');
 
         // Create a new div element for the received message
         var messageDiv = document.createElement('div');
         messageDiv.textContent = event.data; // Set the text content of the div to the received message
+
+
+        messageDiv.innerHTML = `
+
+
+                            <span>Number: ${data.Number}</span>
+                        <span>Text: ${data.Text}</span>
+                        <span>Date: ${data.Date}</span>
+                        <!-- Add more fields as needed -->
+                    `;
+
 
         // Append the new message div to the message container
         messageContainer.appendChild(messageDiv);
