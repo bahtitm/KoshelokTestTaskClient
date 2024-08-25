@@ -1,7 +1,6 @@
 using KoshelokTestTaskClient.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KoshelokTestTaskClient.Controllers
 {
@@ -19,15 +18,24 @@ namespace KoshelokTestTaskClient.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(string message,int number)
+        public async Task<IActionResult> Index(string message, int number)
         {
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
-            Stream stream = new MemoryStream(data);
-            var content = new StreamContent(stream);
-            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-            using var response = await httpClient.PostAsync($"https://localhost:7268/Messages?number={number}", content);
-            string responseText = await response.Content.ReadAsStringAsync();
-            return NoContent();
+            try
+            {
+                byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
+                Stream stream = new MemoryStream(data);
+                var content = new StreamContent(stream);
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                using var response = await httpClient.PostAsync($"https://localhost:7268/Messages?number={number}", content);
+                string responseText = await response.Content.ReadAsStringAsync();
+                return NoContent();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError(error, error.Message);
+                throw;
+            }
+
         }
 
         public async Task<IActionResult> AllMessage()
@@ -39,16 +47,16 @@ namespace KoshelokTestTaskClient.Controllers
 
                 return View(res);
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
+                _logger.LogError(error, error.Message);
                 throw;
             }
-           
-          
+
+
         }
         public IActionResult OnlineMessage()
-        {           
+        {
             return View();
         }
 

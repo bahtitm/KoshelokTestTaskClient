@@ -16,10 +16,10 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-// Enable WebSocket support
+
 app.UseWebSockets();
 
-// WebSocket request handling
+
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/ws")
