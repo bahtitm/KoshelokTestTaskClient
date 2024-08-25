@@ -1,6 +1,7 @@
 using KoshelokTestTaskClient.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KoshelokTestTaskClient.Controllers
 {
@@ -18,20 +19,33 @@ namespace KoshelokTestTaskClient.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(string message)
+        public async Task<IActionResult> Index(string message,int number)
         {
             byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
             Stream stream = new MemoryStream(data);
             var content = new StreamContent(stream);
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-            using var response = await httpClient.PostAsync("https://localhost:7268/Messages", content);
+            using var response = await httpClient.PostAsync($"https://localhost:7268/Messages?number={number}", content);
             string responseText = await response.Content.ReadAsStringAsync();
-            return Ok();
+            return NoContent();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            return View();
+            try
+            {
+                var uri = new Uri($"https://localhost:7268/Messages");
+                List<GetedMessage> res = await httpClient.GetFromJsonAsync<List<GetedMessage>>(uri);
+
+                return View(res);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+          
         }
         public IActionResult OnlineMessage(string st)
         {
