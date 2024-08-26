@@ -12,6 +12,17 @@ namespace KoshelokTestTaskClient.Controllers
         private readonly string HOST;
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
+
+            var handler = new HttpClientHandler
+            {
+                // Bypass SSL validation
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
+
+            httpClient = new HttpClient(handler);
+           
+
+
             _logger = logger;
             this.configuration = configuration;
             HOST = configuration.GetSection("HOST").Value;
