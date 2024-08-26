@@ -8,8 +8,8 @@
 <div id="messageContainer"></div>
 
 <script>
-    
-    var socket = new WebSocket('wss://localhost:7075/ws');
+    var host = window.location.host   
+    var socket = new WebSocket(`wss://${host}/ws`);
 
    
     socket.onmessage = function (event) {

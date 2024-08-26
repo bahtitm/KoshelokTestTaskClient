@@ -7,10 +7,14 @@ namespace KoshelokTestTaskClient.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration configuration;
         static HttpClient httpClient = new HttpClient();
-        public HomeController(ILogger<HomeController> logger)
+        private readonly string HOST;
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            this.configuration = configuration;
+            HOST = configuration.GetSection("HOST").Value;
         }
 
         public IActionResult Index()
@@ -26,7 +30,7 @@ namespace KoshelokTestTaskClient.Controllers
                 Stream stream = new MemoryStream(data);
                 var content = new StreamContent(stream);
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-                using var response = await httpClient.PostAsync($"https://localhost:7268/Messages?number={number}", content);
+                using var response = await httpClient.PostAsync($"{HOST}/Messages?number={number}", content);
                 string responseText = await response.Content.ReadAsStringAsync();
                 return NoContent();
             }
@@ -42,7 +46,7 @@ namespace KoshelokTestTaskClient.Controllers
         {
             try
             {
-                var uri = new Uri($"https://localhost:7268/Messages");
+                var uri = new Uri($"{HOST}/Messages");
                 List<GetedMessage> res = await httpClient.GetFromJsonAsync<List<GetedMessage>>(uri);
 
                 return View(res);
